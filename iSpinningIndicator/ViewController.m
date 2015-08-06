@@ -25,9 +25,9 @@
     [super viewDidLoad];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 - (IBAction)buttonTapped:(id)sender
 {
@@ -42,7 +42,7 @@
     {
         [sender setTitle:@"Start" forState:UIControlStateNormal];
     }
- }
+}
 
 - (void)hideIndicator:(BOOL)shouldHide
 {
@@ -68,14 +68,31 @@
             [imgVw setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin];
         }
         [vwIndicator setHidden:NO];
-        timerIndicator = [NSTimer scheduledTimerWithTimeInterval:.01 target:self selector:@selector(animateImage:) userInfo:[vwIndicator viewWithTag:TAG_INDICATOR] repeats:YES];
+        [self rotateImage];
     }
 }
 
-- (void)animateImage:(NSTimer *)timer
+- (void)rotateImage
 {
-    UIImageView *imageView = timer.userInfo;
-    [imageView setTransform:CGAffineTransformRotate(imageView.transform, M_PI/50)];
+    UIView *vwToBeRotated = [vwIndicator viewWithTag:TAG_INDICATOR];
+    [UIView animateWithDuration:.4
+                          delay:0.
+                        options:UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         vwToBeRotated.transform = CGAffineTransformRotate(vwToBeRotated.transform, M_PI);
+                     }
+                     completion: ^(BOOL finished){
+                         if (![vwIndicator isHidden])
+                         {
+                             [self rotateImage];
+                         }
+                     }];
 }
-
+/*
+ - (void)animateImage:(NSTimer *)timer
+ {
+ UIImageView *imageView = timer.userInfo;
+ [imageView setTransform:CGAffineTransformRotate(imageView.transform, M_PI/50)];
+ }
+ */
 @end
